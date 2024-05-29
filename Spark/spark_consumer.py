@@ -31,17 +31,17 @@ df = df.selectExpr("CAST(value AS STRING) as json") \
     .select("data.*")
 
 # RDS configuration
-rds_endpoint = os.getenv('RDS_ENDPOINT')
-rds_port = os.getenv('RDS_PORT')
-rds_username = os.getenv('RDS_USERNAME')
-rds_password = os.getenv('RDS_PASSWORD')
-rds_db_name = os.getenv('RDS_DB_NAME')
+rds_endpoint = os.getenv('rds_endpoint')
+rds_port = os.getenv('rds_port')
+rds_username = os.getenv('rds_username')
+rds_password = os.getenv('rds_password')
+rds_db_name = os.getenv('rds_db_name')
 
 def write_to_rds(batch_df, batch_id):
     print("URL",f"jdbc:mysql://{rds_endpoint}/{rds_db_name}")
     print("User",f"{rds_username}")
     print("Password", f"{rds_password}")
-    
+
     batch_df.write \
         .format("jdbc") \
         .option("url", f"jdbc:mysql://{rds_endpoint}/{rds_db_name}") \
