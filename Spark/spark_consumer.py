@@ -38,7 +38,10 @@ rds_password = os.getenv('RDS_PASSWORD')
 rds_db_name = os.getenv('RDS_DB_NAME')
 
 def write_to_rds(batch_df, batch_id):
-
+    print("URL",f"jdbc:mysql://{rds_endpoint}/{rds_db_name}")
+    print("User",f"{rds_username}")
+    print("Password", f"{rds_password}")
+    
     batch_df.write \
         .format("jdbc") \
         .option("url", f"jdbc:mysql://{rds_endpoint}/{rds_db_name}") \
