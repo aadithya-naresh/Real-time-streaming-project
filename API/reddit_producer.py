@@ -15,7 +15,7 @@ FINNHUB_API_TOKEN = os.getenv('FINNHUB_API_TOKEN')
 POLYGON_API_KEY = os.getenv('POLYGON_API_KEY')
                                  
 # Symbols to fetch data for
-symbols = ["AAPL", "AMZN", "BINANCE:BTCUSDT", "IC MARKETS:1"]
+symbols = ["AAPL", "AMZN"]
 
 # Kafka setup
 producer = KafkaProducer(
@@ -38,7 +38,7 @@ def on_message(ws, message):
                 'volume': data['v']
             }
             print(record, "\n")
-        # producer.send('finnhub-data', value=record)
+            producer.send('stock-data', value=record)
 
 # Function to handle WebSocket errors
 def on_error(ws, error):
@@ -51,7 +51,6 @@ def on_close():
 # Function to handle WebSocket connection opening
 def on_open(ws):
     print("On Open")
-    symbols = ["AAPL", "AMZN", "BINANCE:BTCUSDT", "IC MARKETS:1"]
     for symbol in symbols:
         ws.send(json.dumps({"type": "subscribe", "symbol": symbol}))
     print("On Open done")
@@ -91,5 +90,6 @@ def fetch_intraday_data(symbol):
 # Main function to start the data streaming
 if __name__ == '__main__':
     for symbol in symbols:
+        print(symbol)
         fetch_intraday_data(symbol)
     stream_data()
