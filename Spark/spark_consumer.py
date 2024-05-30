@@ -37,19 +37,26 @@ rds_username = os.getenv('rds_username')
 rds_password = os.getenv('rds_password')
 rds_db_name = os.getenv('rds_db_name')
 
+db_properties = {
+    "user": rds_username,
+    "password": rds_password,
+    "driver": "com.mysql.cj.jdbc.Driver"
+}
+
 def write_to_rds(batch_df, batch_id):
     print("URL",f"jdbc:mysql://{rds_endpoint}/{rds_db_name}")
     print("User",f"{rds_username}")
     print("Password", f"{rds_password}")
 
-    batch_df.write \
-        .format("jdbc") \
-        .option("url", f"jdbc:mysql://{rds_endpoint}/{rds_db_name}") \
-        .option("dbtable", "stock_data") \
-        .option("user", rds_username) \
-        .option("password", rds_password) \
-        .mode("append") \
-        .save()
+    # Write DataFrame data to the table (existing or newly created)
+    dfwriter = batch_df.write.mode("append")
+    dfwriter.jdbc(url=f"jdbc:mysql://{rds_endpoint}/{rds_db_name}", table="stock_data", properties=db_properties)
+
+# Write data to RDS
+query = df.writeStream \
+    .outputMode("append") \
+    .foreachBatch(write_to_rds) \
+    .start()
         
 # Write data to RDS
 query = df.writeStream \
