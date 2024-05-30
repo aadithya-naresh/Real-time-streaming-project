@@ -50,7 +50,7 @@ def write_to_rds(batch_df, batch_id):
 
     # Write DataFrame data to the table (existing or newly created)
     dfwriter = batch_df.write.mode("append")
-    dfwriter.jdbc(url=f"jdbc:mysql://{rds_endpoint}/{rds_db_name}", table="stock_data", properties=db_properties)
+    dfwriter.jdbc(url=f"jdbc:mysql://{rds_endpoint}/{rds_db_name}", table="stock_data", properties=db_properties, mode="append")
 
 # Write data to RDS
 query = df.writeStream \
