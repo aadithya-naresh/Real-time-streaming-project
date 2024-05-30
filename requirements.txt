@@ -1,3 +1,7 @@
 pyspark
 kafka-python
 six
+requests
+websocket
+python-dotenv
+urllib3==1.26.6
